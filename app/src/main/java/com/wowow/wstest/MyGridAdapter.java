@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -17,10 +16,12 @@ class MyGridAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<String> items;
+    int imageSize;
 
-    MyGridAdapter(Context context, ArrayList<String> items) {
+    MyGridAdapter(Context context, ArrayList<String> items, int imageSize) {
         this.context=context;
         this.items=items;
+        this.imageSize = imageSize;
     }
 
     @Override
@@ -43,9 +44,11 @@ class MyGridAdapter extends BaseAdapter {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(context);
-            imageView.setLayoutParams(new GridView.LayoutParams(186, 186));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        } else imageView=(ImageView) convertView;
+            imageView.setLayoutParams(new GridView.LayoutParams(imageSize, imageSize));
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        } else {
+            imageView=(ImageView) convertView;
+        }
 
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(context));
@@ -58,7 +61,5 @@ class MyGridAdapter extends BaseAdapter {
 
         return imageView;
     }
-
-
 
 }

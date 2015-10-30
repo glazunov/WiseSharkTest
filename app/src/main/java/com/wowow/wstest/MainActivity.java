@@ -1,13 +1,10 @@
 package com.wowow.wstest;
 
-
-import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.GridView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -31,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+             .denyCacheImageMultipleSizesInMemory()
              .build();
         ImageLoader.getInstance().init(config);
 

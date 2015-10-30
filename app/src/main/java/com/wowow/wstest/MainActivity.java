@@ -1,28 +1,17 @@
 package com.wowow.wstest;
 
-import android.app.ActionBar;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
-import com.squareup.picasso.Picasso;
-
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,30 +26,14 @@ public class MainActivity extends AppCompatActivity {
          .build();
         ImageLoader.getInstance().init(config);
 
+        InputStream is = this.getResources().openRawResource(R.raw.ws);
+        ArrayList<String> items = jsonArrayParser(inputStringToStringConverter(is));
 
-        ImageFactory imageFactory = new ImageFactory(this);
-        ArrayList<String> items = imageFactory.imgUrl;
         MyGridAdapter adapter = new MyGridAdapter(this, items);
         GridView gv = (GridView)findViewById (R.id.gridView);
         gv.setAdapter(adapter);
 
-/*
-        ImageFactory imageFactory = new ImageFactory(this);
 
-        TextView tv = (TextView)findViewById (R.id.textView);
-        tv.setText(imageFactory.urls[0] + " dsfdsf");
-
-        ImageView imageView = new ImageView(this);
-        ImageView iv = (ImageView)findViewById(R.id.imageView);
-
-       // iv.setImageBitmap(getBitmapFromUrl("http://a1.dspncdn.com/media/206x/0c/03/cb/0c03cb25b692947a9bbea12a02086d17.jpg"));
-        Picasso.with(this).load("http://a1.dspncdn.com/media/206x/0c/03/cb/0c03cb25b692947a9bbea12a02086d17.jpg").into(imageView);
-        Picasso.with(this).load("http://a1.dspncdn.com/media/206x/0c/03/cb/0c03cb25b692947a9bbea12a02086d17.jpg").into(iv);
-
-//        imageView.setImageBitmap(getBitmapFromUrl(imageFactory.urls[0]));
-//http://a1.dspncdn.com/media/206x/0c/03/cb/0c03cb25b692947a9bbea12a02086d17.jpg
-
-*/
     }
 
     @Override
@@ -85,6 +58,36 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    String inputStringToStringConverter(InputStream is){
+        String s = "";
+        try {
+            s = IOUtils.toString(is);
+            IOUtils.closeQuietly(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    ArrayList<String> jsonArrayParser(String json) {
+        ArrayList<String> imgUrl = new ArrayList<String>();
+        String[] urls;
+        if (!json.isEmpty()) {
+            json = StringUtils.substringBetween(json, "[", "]");
+            urls = json.split(",");
+            for (String url : urls) {
+                if (url.length() > 5) {
+                    url = url.replaceAll("\\s", "");
+                    url = url.replace("\"", "");
+                    url = url.replace(",", "");
+                    url = url.replace(" ", "");
+                    imgUrl.add(url);
+                }
+            }
+        }
+        return imgUrl;
+    }
 
 
 

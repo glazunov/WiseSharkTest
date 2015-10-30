@@ -11,14 +11,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-
 import java.util.ArrayList;
 
-/**
- * Created by wowow on 30.10.15.
- */
-
-class MyGridAdapter extends BaseAdapter { //MyGridAdapter
+class MyGridAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<String> items;
@@ -63,5 +58,7 @@ class MyGridAdapter extends BaseAdapter { //MyGridAdapter
 
         return imageView;
     }
+
+
 
 }
